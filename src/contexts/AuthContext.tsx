@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = getAuthToken();
     if (token) {
       // In a real app, you'd validate the token with your API here
-      // For now, we'll just simulate a user being logged in
+      // For this demo, we'll just simulate a user being logged in
       const simulatedUser = { 
         id: "simulated-id", 
         name: "Simulated User", 
@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await registerUser(data);
       setUser(response.user);
       setAuthToken(response.token);
-      toast.success("Registration successful");
+      toast.success(`Welcome ${response.user.name}! Your account has been created successfully.`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Registration failed");
       throw error;
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await loginUser(data);
       setUser(response.user);
       setAuthToken(response.token);
-      toast.success("Login successful");
+      toast.success(`Welcome back, ${response.user.name}!`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Login failed");
       throw error;
