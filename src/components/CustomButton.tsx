@@ -1,28 +1,34 @@
 
 import React from "react";
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { type VariantProps } from "class-variance-authority";
+import { buttonVariants } from "@/components/ui/button";
 
-interface CustomButtonProps extends ButtonProps {
+// Define our custom variants separate from the base ButtonProps
+type CustomVariants = "primary" | "apple";
+
+interface CustomButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "variant"> {
   isLoading?: boolean;
-  variant?: 
-    | "default" 
-    | "destructive" 
-    | "outline" 
-    | "secondary" 
-    | "ghost" 
-    | "link" 
-    | "primary"
-    | "apple";
+  variant?: VariantProps<typeof buttonVariants>["variant"] | CustomVariants;
+  size?: VariantProps<typeof buttonVariants>["size"];
+  className?: string;
+  asChild?: boolean;
 }
 
 const CustomButton = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
-  ({ className, children, isLoading, variant = "default", ...props }, ref) => {
+  ({ className, children, isLoading, variant = "default", size, asChild = false, ...props }, ref) => {
     // Mapping custom variants to tailwind classes
     const variantClasses = {
       primary: "bg-primary text-primary-foreground hover:bg-primary/90",
       apple: "bg-[#0071e3] text-white hover:bg-[#0077ED] transition-all duration-300 shadow-sm",
     };
+
+    // Check if we're using a custom variant
+    const isCustomVariant = variant === "primary" || variant === "apple";
+    
+    // Pass variant to Button only if it's a standard variant
+    const buttonVariantProp = isCustomVariant ? undefined : variant;
 
     return (
       <Button
@@ -30,12 +36,14 @@ const CustomButton = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
         className={cn(
           "relative font-medium transition-all overflow-hidden",
           variant === "apple" && "rounded-full px-8",
-          variant in variantClasses ? variantClasses[variant as keyof typeof variantClasses] : "",
+          isCustomVariant ? variantClasses[variant as CustomVariants] : "",
           isLoading && "cursor-not-allowed",
           className
         )}
         disabled={isLoading || props.disabled}
-        variant={variant !== "primary" && variant !== "apple" ? variant : "default"}
+        variant={buttonVariantProp}
+        size={size}
+        asChild={asChild}
         {...props}
       >
         {isLoading && (

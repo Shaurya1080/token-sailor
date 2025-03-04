@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,7 +57,10 @@ export function AuthForm() {
   const handleLogin = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     try {
-      await login(data);
+      await login({
+        email: data.email,
+        password: data.password,
+      });
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -69,8 +71,11 @@ export function AuthForm() {
   const handleRegister = async (data: RegisterFormValues) => {
     setIsSubmitting(true);
     try {
-      const { confirmPassword, ...registerData } = data;
-      await register(registerData);
+      await register({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
     } catch (error) {
       console.error("Registration error:", error);
     } finally {
