@@ -1,5 +1,7 @@
-import { useLocation } from "react-router-dom";
+
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import { CustomButton } from "@/components/CustomButton";
 
 const NotFound = () => {
   const location = useLocation();
@@ -12,13 +14,18 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white p-4">
+      <div className="text-center max-w-md mx-auto">
+        <span className="inline-block text-8xl font-thin text-gray-300 mb-6">404</span>
+        <h1 className="text-3xl font-semibold mb-4">Page not found</h1>
+        <p className="text-gray-600 mb-8">
+          Sorry, we couldn't find the page you're looking for. The page may have been moved or doesn't exist.
+        </p>
+        <Link to="/">
+          <CustomButton variant="apple" className="min-w-[180px]">
+            Return to Home
+          </CustomButton>
+        </Link>
       </div>
     </div>
   );
